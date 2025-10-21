@@ -6,7 +6,10 @@ description: Log in to your PlanIt account.
 
 # Sign in
 
-Click the button to sign in to **PlanIt**. After a successful login you’ll be sent to the homepage.
+Welcome back to **PlanIt** ✨
+
+Click the button below to sign in.  
+Once signed in, you’ll be redirected to the homepage.
 
 <button id="open-login" style="
   padding:.75rem 1rem;
@@ -14,37 +17,54 @@ Click the button to sign in to **PlanIt**. After a successful login you’ll be 
   border:0;
   font-weight:600;
   cursor:pointer;
-  background:#111;
+  background:#4f46e5;
   color:#fff;
-">Open sign-in</button>
+  margin-top: 1rem;
+">
+  Open Sign-in
+</button>
 
 <p style="margin-top:.75rem; color:#666">
-  Don’t have an account? <a href="/signup/">Create one</a>.
+  Don’t have an account yet? <a href="/signup/">Create one</a>.
 </p>
 
-<!-- Netlify Identity widget -->
+<!-- Load Netlify Identity Widget -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-<!-- Init + redirect on login -->
+<!-- Login + Redirect Logic -->
 <script>
   (function () {
     function init() {
       if (!window.netlifyIdentity) return;
 
+      // If already logged in, redirect right away
+      const user = window.netlifyIdentity.currentUser();
+      if (user) {
+        window.location.assign('/');
+        return;
+      }
+
+      // Button opens login modal
       const btn = document.getElementById('open-login');
       if (btn) btn.addEventListener('click', () => window.netlifyIdentity.open('login'));
 
-      // Open automatically if user lands on /login
+      // Open login automatically when page loads
       window.netlifyIdentity.on('init', () => window.netlifyIdentity.open('login'));
 
-      // After successful login, go home
+      // Redirect after successful login
       window.netlifyIdentity.on('login', () => {
         window.location.assign('/');
       });
 
+      // Optional: handle logout
+      window.netlifyIdentity.on('logout', () => {
+        console.log('User logged out');
+      });
+
+      // Optional: handle errors
       window.netlifyIdentity.on('error', (e) => {
         console.error('Identity error:', e);
-        alert('Unable to open sign-in right now. Please try again.');
+        alert('Unable to sign in right now. Please try again.');
       });
 
       window.netlifyIdentity.init();
