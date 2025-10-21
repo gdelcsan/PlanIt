@@ -1,0 +1,59 @@
+---
+title: Sign in
+template: page
+description: Log in to your PlanIt account.
+---
+
+# Sign in
+
+Click the button to sign in to **PlanIt**. After a successful login you’ll be sent to the homepage.
+
+<button id="open-login" style="
+  padding:.75rem 1rem;
+  border-radius:12px;
+  border:0;
+  font-weight:600;
+  cursor:pointer;
+  background:#111;
+  color:#fff;
+">Open sign-in</button>
+
+<p style="margin-top:.75rem; color:#666">
+  Don’t have an account? <a href="/signup/">Create one</a>.
+</p>
+
+<!-- Netlify Identity widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<!-- Init + redirect on login -->
+<script>
+  (function () {
+    function init() {
+      if (!window.netlifyIdentity) return;
+
+      const btn = document.getElementById('open-login');
+      if (btn) btn.addEventListener('click', () => window.netlifyIdentity.open('login'));
+
+      // Open automatically if user lands on /login
+      window.netlifyIdentity.on('init', () => window.netlifyIdentity.open('login'));
+
+      // After successful login, go home
+      window.netlifyIdentity.on('login', () => {
+        window.location.assign('/');
+      });
+
+      window.netlifyIdentity.on('error', (e) => {
+        console.error('Identity error:', e);
+        alert('Unable to open sign-in right now. Please try again.');
+      });
+
+      window.netlifyIdentity.init();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
