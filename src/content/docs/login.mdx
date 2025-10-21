@@ -28,41 +28,43 @@ Once signed in, you’ll be redirected to the homepage.
   Don’t have an account yet? <a href="/signup/">Create one</a>.
 </p>
 
-{/* Load Netlify Identity Widget */}
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-{/* Login + Redirect Logic */}
 <script>
   (function () {
     function init() {
       if (!window.netlifyIdentity) return;
 
       // If already logged in, redirect right away
-      const user = window.netlifyIdentity.currentUser();
+      var user = window.netlifyIdentity.currentUser();
       if (user) {
         window.location.assign('/');
         return;
       }
 
       // Button opens login modal
-      const btn = document.getElementById('open-login');
-      if (btn) btn.addEventListener('click', () => window.netlifyIdentity.open('login'));
+      var btn = document.getElementById('open-login');
+      if (btn) btn.addEventListener('click', function () {
+        window.netlifyIdentity.open('login');
+      });
 
       // Open login automatically when page loads
-      window.netlifyIdentity.on('init', () => window.netlifyIdentity.open('login'));
+      window.netlifyIdentity.on('init', function () {
+        window.netlifyIdentity.open('login');
+      });
 
       // Redirect after successful login
-      window.netlifyIdentity.on('login', () => {
+      window.netlifyIdentity.on('login', function () {
         window.location.assign('/');
       });
 
       // Optional: handle logout
-      window.netlifyIdentity.on('logout', () => {
+      window.netlifyIdentity.on('logout', function () {
         console.log('User logged out');
       });
 
       // Optional: handle errors
-      window.netlifyIdentity.on('error', (e) => {
+      window.netlifyIdentity.on('error', function (e) {
         console.error('Identity error:', e);
         alert('Unable to sign in right now. Please try again.');
       });
